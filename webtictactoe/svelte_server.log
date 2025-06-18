@@ -1,0 +1,1536 @@
+
+> svelte@0.0.1 dev
+> vite dev --host 0.0.0.0 --cors --port 3000
+
+6:11:38 PM [vite] (client) Forced re-optimization of dependencies
+
+  VITE v6.2.1  ready in 1636 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://172.17.0.2:3000/
+6:19:56 PM [vite] (client) ✨ new dependencies optimized: clsx
+6:19:56 PM [vite] (client) ✨ optimized dependencies changed. reloading
+6:20:41 PM [vite] (ssr) page reload src/routes/+page.svelte
+6:20:45 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/0.js
+6:20:45 PM [vite] (client) page reload .svelte-kit/generated/client/app.js
+6:20:45 PM [vite] (client) page reload .svelte-kit/generated/client/matchers.js
+6:20:45 PM [vite] (client) page reload .svelte-kit/generated/root.js
+6:20:45 PM [vite] (ssr) page reload .svelte-kit/generated/root.js
+6:20:45 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/2.js
+6:20:45 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/1.js
+6:20:45 PM [vite] (ssr) page reload .svelte-kit/generated/server/internal.js
+6:20:45 PM [vite] (ssr) Error when evaluating SSR module /src/routes/+page.svelte: src/routes/+page.svelte:221:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate
+  Plugin: vite-plugin-svelte
+  File: src/routes/+page.svelte:221:0
+   219 |  </main>
+   220 |  
+   221 |  <script>
+          ^
+   222 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)
+   223 |    // This is a minimalist approach, highlight if any of the winning lines match
+[Error [CompileError]: src/routes/+page.svelte:221:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate] {
+  id: 'src/routes/+page.svelte',
+  frame: ' 219 |  </main>\n' +
+    ' 220 |  \n' +
+    ' 221 |  <script>\n' +
+    '        ^\n' +
+    ' 222 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    ' 223 |    // This is a minimalist approach, highlight if any of the winning lines match',
+  code: 'script_duplicate',
+  loc: { line: 221, column: 0, file: 'src/routes/+page.svelte' },
+  plugin: 'vite-plugin-svelte',
+  pluginCode: '<script>\n' +
+    '  // --- Game logic state ---\n' +
+    '  let board = [\n' +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    '  ];\n' +
+    "  let currentPlayer = 'X';\n" +
+    "  let winner = '';\n" +
+    '  let draw = false;\n' +
+    `  let status = "Player X's turn";\n` +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function handleCellClick(row, col) {\n' +
+    '    // Prevent click if cell is already taken or game is finished\n' +
+    '    if (board[row][col] || winner) return;\n' +
+    '\n' +
+    '    board[row][col] = currentPlayer;\n' +
+    '    if (checkWinner()) {\n' +
+    '      winner = currentPlayer;\n' +
+    '      status = `Winner: ${winner}!`;\n' +
+    '    } else if (isBoardFull()) {\n' +
+    '      draw = true;\n' +
+    "      status = 'Draw!';\n" +
+    '    } else {\n' +
+    "      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';\n" +
+    "      status = `Player ${currentPlayer}'s turn`;\n" +
+    '    }\n' +
+    '    // ensure reactivity for Svelte\n' +
+    '    board = [...board.map(r => [...r])];\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function checkWinner() {\n' +
+    '    // Rows, columns, diagonals\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '\n' +
+    '    return lines.some(line => {\n' +
+    '      const [a, b, c] = line;\n' +
+    '      return (\n' +
+    '        board[a[0]][a[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[b[0]][b[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[c[0]][c[1]]\n' +
+    '      );\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function isBoardFull() {\n' +
+    "    return board.flat().every(cell => cell !== '');\n" +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function restartGame() {\n' +
+    '    board = [\n' +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    '    ];\n' +
+    "    currentPlayer = 'X';\n" +
+    "    winner = '';\n" +
+    '    draw = false;\n' +
+    `    status = "Player X's turn";\n` +
+    '  }\n' +
+    '</script>\n' +
+    '\n' +
+    '<style>\n' +
+    '  :root {\n' +
+    '    --primary: #4CAF50;\n' +
+    '    --secondary: #FFC107;\n' +
+    '    --accent: #2196F3;\n' +
+    '    --background: #f5f5f5;\n' +
+    '    --foreground: #fff;\n' +
+    '    --cell-size: min(100px, 18vw);\n' +
+    '    --cell-font-size: min(3rem, 7vw);\n' +
+    '  }\n' +
+    '\n' +
+    '  main {\n' +
+    '    height: 100vh;\n' +
+    '    width: 100vw;\n' +
+    '    background: var(--background);\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .game-container {\n' +
+    '    background: var(--foreground);\n' +
+    '    box-shadow: 0 6px 32px rgba(0,0,0,0.09);\n' +
+    '    padding: 2rem 2rem 1.5rem 2rem;\n' +
+    '    border-radius: 2rem;\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .status {\n' +
+    '    font-size: 1.35rem;\n' +
+    '    margin-bottom: 1.1rem;\n' +
+    '    font-weight: 600;\n' +
+    '    color: var(--primary);\n' +
+    '    min-height: 2.2em;\n' +
+    '    letter-spacing: 0.01em;\n' +
+    '    text-align: center;\n' +
+    '    transition: color 0.25s;\n' +
+    '  }\n' +
+    '\n' +
+    '  .board {\n' +
+    '    display: grid;\n' +
+    '    grid-template-columns: repeat(3, var(--cell-size));\n' +
+    '    grid-template-rows: repeat(3, var(--cell-size));\n' +
+    '    gap: 0.32em;\n' +
+    '    margin-bottom: 1.3em;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell {\n' +
+    '    width: var(--cell-size);\n' +
+    '    height: var(--cell-size);\n' +
+    '    font-size: var(--cell-font-size);\n' +
+    '    background: var(--foreground);\n' +
+    '    border: none;\n' +
+    '    outline: 2px solid var(--accent);\n' +
+    '    border-radius: 0.65em;\n' +
+    '    display: flex;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '    font-weight: bold;\n' +
+    '    color: var(--primary);\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.16s, color 0.16s;\n' +
+    '    user-select: none;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell:disabled,\n' +
+    '  .cell.disabled {\n' +
+    '    background: #e0e0e0;\n' +
+    '    color: #9e9e9e;\n' +
+    '    cursor: not-allowed;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell[aria-current="true"]:not(:disabled) {\n' +
+    '    background: var(--secondary);\n' +
+    '    color: #212121;\n' +
+    '    outline: 2.5px solid var(--primary);\n' +
+    '    z-index: 2;\n' +
+    '  }\n' +
+    '\n' +
+    '  .winner-cell {\n' +
+    '    background: var(--primary);\n' +
+    '    color: #fff;\n' +
+    '    animation: winner-flash 1s linear infinite alternate;\n' +
+    '  }\n' +
+    '\n' +
+    '  @keyframes winner-flash {\n' +
+    '    0% { background: var(--primary); color: #fff; }\n' +
+    '    100% { background: var(--secondary); color: #212121; }\n' +
+    '  }\n' +
+    '\n' +
+    '  .restart-btn {\n' +
+    '    background: var(--accent);\n' +
+    '    color: #fff;\n' +
+    '    border: none;\n' +
+    '    padding: 0.75em 2em;\n' +
+    '    border-radius: 1em;\n' +
+    '    font-size: 1.05rem;\n' +
+    '    font-weight: 600;\n' +
+    '    letter-spacing: 0.05em;\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.2s;\n' +
+    '    box-shadow: 0 2px 8px #bbb6;\n' +
+    '  }\n' +
+    '  .restart-btn:active {\n' +
+    '    background: var(--primary);\n' +
+    '  }\n' +
+    '\n' +
+    '  @media (max-width: 600px) {\n' +
+    '    .game-container {\n' +
+    '      padding: 1em 0.5em 1em 0.5em;\n' +
+    '      border-radius: 1.1rem;\n' +
+    '    }\n' +
+    '  }\n' +
+    '</style>\n' +
+    '\n' +
+    '<main>\n' +
+    '  <div class="game-container" data-testid="tictactoe-container">\n' +
+    '    <div class="status" data-testid="status">{status}</div>\n' +
+    '    <div class="board" data-testid="board">\n' +
+    '      {#each board as row, rIdx}\n' +
+    '        {#each row as cell, cIdx}\n' +
+    '          <button\n' +
+    `            class="cell {winner && winnerCells(rIdx, cIdx) ? 'winner-cell' : ''} {cell || winner ? 'disabled' : ''}"\n` +
+    '            disabled={!!cell || !!winner}\n' +
+    `            aria-current={currentPlayer === 'X' && !winner && !draw && !cell && rIdx*cIdx===0 ? "true" : undefined}\n` +
+    '            data-testid={"cell-" + rIdx + "-" + cIdx}\n' +
+    '            on:click={() => handleCellClick(rIdx, cIdx)}\n' +
+    '          >\n' +
+    '            {cell}\n' +
+    '          </button>\n' +
+    '        {/each}\n' +
+    '      {/each}\n' +
+    '    </div>\n' +
+    '    <button class="restart-btn" on:click={restartGame} data-testid="restart">\n' +
+    '      Restart\n' +
+    '    </button>\n' +
+    '  </div>\n' +
+    '</main>\n' +
+    '\n' +
+    '<script>\n' +
+    '  // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    '  // This is a minimalist approach, highlight if any of the winning lines match\n' +
+    '  function winnerCells(r, c) {\n' +
+    '    if (!winner) return false;\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '    return lines.some(line => {\n' +
+    '      if (\n' +
+    '        board[line[0][0]][line[0][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[1][0]][line[1][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[2][0]][line[2][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === winner\n' +
+    '      ) {\n' +
+    '        return line.some(([lr, lc]) => lr === r && lc === c);\n' +
+    '      }\n' +
+    '      return false;\n' +
+    '    });\n' +
+    '  }\n' +
+    '</script>\n',
+  runnerError: Error: RunnerError
+      at reviveInvokeError (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:541:18)
+      at Object.invoke (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:624:15)
+      at async SSRCompatModuleRunner.getModuleInformation (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1192:73)
+      at async SSRCompatModuleRunner.import (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1103:27)
+      at async instantiateModule (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/chunks/dep-glQox-ep.js:30872:12)
+      at async loud_ssr_load_module (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:69:11)
+      at async resolve (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:96:18)
+      at async result.component (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:194:41)
+      at async Promise.all (index 1)
+      at async render_response (/home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/runtime/server/page/render.js:76:21)
+}
+6:20:45 PM [vite] (client) ✨ new dependencies optimized: devalue
+6:20:45 PM [vite] (client) ✨ optimized dependencies changed. reloading
+6:20:46 PM [vite] (ssr) Error when evaluating SSR module /src/routes/+page.svelte: src/routes/+page.svelte:221:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate
+  Plugin: vite-plugin-svelte
+  File: src/routes/+page.svelte:221:0
+   219 |  </main>
+   220 |  
+   221 |  <script>
+          ^
+   222 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)
+   223 |    // This is a minimalist approach, highlight if any of the winning lines match
+[Error [CompileError]: src/routes/+page.svelte:221:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate] {
+  id: 'src/routes/+page.svelte',
+  frame: ' 219 |  </main>\n' +
+    ' 220 |  \n' +
+    ' 221 |  <script>\n' +
+    '        ^\n' +
+    ' 222 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    ' 223 |    // This is a minimalist approach, highlight if any of the winning lines match',
+  code: 'script_duplicate',
+  loc: { line: 221, column: 0, file: 'src/routes/+page.svelte' },
+  plugin: 'vite-plugin-svelte',
+  pluginCode: '<script>\n' +
+    '  // --- Game logic state ---\n' +
+    '  let board = [\n' +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    '  ];\n' +
+    "  let currentPlayer = 'X';\n" +
+    "  let winner = '';\n" +
+    '  let draw = false;\n' +
+    `  let status = "Player X's turn";\n` +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function handleCellClick(row, col) {\n' +
+    '    // Prevent click if cell is already taken or game is finished\n' +
+    '    if (board[row][col] || winner) return;\n' +
+    '\n' +
+    '    board[row][col] = currentPlayer;\n' +
+    '    if (checkWinner()) {\n' +
+    '      winner = currentPlayer;\n' +
+    '      status = `Winner: ${winner}!`;\n' +
+    '    } else if (isBoardFull()) {\n' +
+    '      draw = true;\n' +
+    "      status = 'Draw!';\n" +
+    '    } else {\n' +
+    "      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';\n" +
+    "      status = `Player ${currentPlayer}'s turn`;\n" +
+    '    }\n' +
+    '    // ensure reactivity for Svelte\n' +
+    '    board = [...board.map(r => [...r])];\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function checkWinner() {\n' +
+    '    // Rows, columns, diagonals\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '\n' +
+    '    return lines.some(line => {\n' +
+    '      const [a, b, c] = line;\n' +
+    '      return (\n' +
+    '        board[a[0]][a[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[b[0]][b[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[c[0]][c[1]]\n' +
+    '      );\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function isBoardFull() {\n' +
+    "    return board.flat().every(cell => cell !== '');\n" +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function restartGame() {\n' +
+    '    board = [\n' +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    '    ];\n' +
+    "    currentPlayer = 'X';\n" +
+    "    winner = '';\n" +
+    '    draw = false;\n' +
+    `    status = "Player X's turn";\n` +
+    '  }\n' +
+    '</script>\n' +
+    '\n' +
+    '<style>\n' +
+    '  :root {\n' +
+    '    --primary: #4CAF50;\n' +
+    '    --secondary: #FFC107;\n' +
+    '    --accent: #2196F3;\n' +
+    '    --background: #f5f5f5;\n' +
+    '    --foreground: #fff;\n' +
+    '    --cell-size: min(100px, 18vw);\n' +
+    '    --cell-font-size: min(3rem, 7vw);\n' +
+    '  }\n' +
+    '\n' +
+    '  main {\n' +
+    '    height: 100vh;\n' +
+    '    width: 100vw;\n' +
+    '    background: var(--background);\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .game-container {\n' +
+    '    background: var(--foreground);\n' +
+    '    box-shadow: 0 6px 32px rgba(0,0,0,0.09);\n' +
+    '    padding: 2rem 2rem 1.5rem 2rem;\n' +
+    '    border-radius: 2rem;\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .status {\n' +
+    '    font-size: 1.35rem;\n' +
+    '    margin-bottom: 1.1rem;\n' +
+    '    font-weight: 600;\n' +
+    '    color: var(--primary);\n' +
+    '    min-height: 2.2em;\n' +
+    '    letter-spacing: 0.01em;\n' +
+    '    text-align: center;\n' +
+    '    transition: color 0.25s;\n' +
+    '  }\n' +
+    '\n' +
+    '  .board {\n' +
+    '    display: grid;\n' +
+    '    grid-template-columns: repeat(3, var(--cell-size));\n' +
+    '    grid-template-rows: repeat(3, var(--cell-size));\n' +
+    '    gap: 0.32em;\n' +
+    '    margin-bottom: 1.3em;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell {\n' +
+    '    width: var(--cell-size);\n' +
+    '    height: var(--cell-size);\n' +
+    '    font-size: var(--cell-font-size);\n' +
+    '    background: var(--foreground);\n' +
+    '    border: none;\n' +
+    '    outline: 2px solid var(--accent);\n' +
+    '    border-radius: 0.65em;\n' +
+    '    display: flex;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '    font-weight: bold;\n' +
+    '    color: var(--primary);\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.16s, color 0.16s;\n' +
+    '    user-select: none;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell:disabled,\n' +
+    '  .cell.disabled {\n' +
+    '    background: #e0e0e0;\n' +
+    '    color: #9e9e9e;\n' +
+    '    cursor: not-allowed;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell[aria-current="true"]:not(:disabled) {\n' +
+    '    background: var(--secondary);\n' +
+    '    color: #212121;\n' +
+    '    outline: 2.5px solid var(--primary);\n' +
+    '    z-index: 2;\n' +
+    '  }\n' +
+    '\n' +
+    '  .winner-cell {\n' +
+    '    background: var(--primary);\n' +
+    '    color: #fff;\n' +
+    '    animation: winner-flash 1s linear infinite alternate;\n' +
+    '  }\n' +
+    '\n' +
+    '  @keyframes winner-flash {\n' +
+    '    0% { background: var(--primary); color: #fff; }\n' +
+    '    100% { background: var(--secondary); color: #212121; }\n' +
+    '  }\n' +
+    '\n' +
+    '  .restart-btn {\n' +
+    '    background: var(--accent);\n' +
+    '    color: #fff;\n' +
+    '    border: none;\n' +
+    '    padding: 0.75em 2em;\n' +
+    '    border-radius: 1em;\n' +
+    '    font-size: 1.05rem;\n' +
+    '    font-weight: 600;\n' +
+    '    letter-spacing: 0.05em;\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.2s;\n' +
+    '    box-shadow: 0 2px 8px #bbb6;\n' +
+    '  }\n' +
+    '  .restart-btn:active {\n' +
+    '    background: var(--primary);\n' +
+    '  }\n' +
+    '\n' +
+    '  @media (max-width: 600px) {\n' +
+    '    .game-container {\n' +
+    '      padding: 1em 0.5em 1em 0.5em;\n' +
+    '      border-radius: 1.1rem;\n' +
+    '    }\n' +
+    '  }\n' +
+    '</style>\n' +
+    '\n' +
+    '<main>\n' +
+    '  <div class="game-container" data-testid="tictactoe-container">\n' +
+    '    <div class="status" data-testid="status">{status}</div>\n' +
+    '    <div class="board" data-testid="board">\n' +
+    '      {#each board as row, rIdx}\n' +
+    '        {#each row as cell, cIdx}\n' +
+    '          <button\n' +
+    `            class="cell {winner && winnerCells(rIdx, cIdx) ? 'winner-cell' : ''} {cell || winner ? 'disabled' : ''}"\n` +
+    '            disabled={!!cell || !!winner}\n' +
+    `            aria-current={currentPlayer === 'X' && !winner && !draw && !cell && rIdx*cIdx===0 ? "true" : undefined}\n` +
+    '            data-testid={"cell-" + rIdx + "-" + cIdx}\n' +
+    '            on:click={() => handleCellClick(rIdx, cIdx)}\n' +
+    '          >\n' +
+    '            {cell}\n' +
+    '          </button>\n' +
+    '        {/each}\n' +
+    '      {/each}\n' +
+    '    </div>\n' +
+    '    <button class="restart-btn" on:click={restartGame} data-testid="restart">\n' +
+    '      Restart\n' +
+    '    </button>\n' +
+    '  </div>\n' +
+    '</main>\n' +
+    '\n' +
+    '<script>\n' +
+    '  // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    '  // This is a minimalist approach, highlight if any of the winning lines match\n' +
+    '  function winnerCells(r, c) {\n' +
+    '    if (!winner) return false;\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '    return lines.some(line => {\n' +
+    '      if (\n' +
+    '        board[line[0][0]][line[0][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[1][0]][line[1][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[2][0]][line[2][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === winner\n' +
+    '      ) {\n' +
+    '        return line.some(([lr, lc]) => lr === r && lc === c);\n' +
+    '      }\n' +
+    '      return false;\n' +
+    '    });\n' +
+    '  }\n' +
+    '</script>\n',
+  runnerError: Error: RunnerError
+      at reviveInvokeError (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:541:18)
+      at Object.invoke (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:624:15)
+      at async SSRCompatModuleRunner.getModuleInformation (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1192:73)
+      at async SSRCompatModuleRunner.import (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1103:27)
+      at async instantiateModule (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/chunks/dep-glQox-ep.js:30872:12)
+      at async loud_ssr_load_module (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:69:11)
+      at async resolve (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:96:18)
+      at async result.component (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:194:41)
+      at async Promise.all (index 1)
+      at async render_response (/home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/runtime/server/page/render.js:76:21)
+}
+6:20:46 PM [vite] (ssr) Error when evaluating SSR module /src/routes/+page.svelte: src/routes/+page.svelte:221:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate
+  Plugin: vite-plugin-svelte
+  File: src/routes/+page.svelte:221:0
+   219 |  </main>
+   220 |  
+   221 |  <script>
+          ^
+   222 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)
+   223 |    // This is a minimalist approach, highlight if any of the winning lines match
+[Error [CompileError]: src/routes/+page.svelte:221:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate] {
+  id: 'src/routes/+page.svelte',
+  frame: ' 219 |  </main>\n' +
+    ' 220 |  \n' +
+    ' 221 |  <script>\n' +
+    '        ^\n' +
+    ' 222 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    ' 223 |    // This is a minimalist approach, highlight if any of the winning lines match',
+  code: 'script_duplicate',
+  loc: { line: 221, column: 0, file: 'src/routes/+page.svelte' },
+  plugin: 'vite-plugin-svelte',
+  pluginCode: '<script>\n' +
+    '  // --- Game logic state ---\n' +
+    '  let board = [\n' +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    '  ];\n' +
+    "  let currentPlayer = 'X';\n" +
+    "  let winner = '';\n" +
+    '  let draw = false;\n' +
+    `  let status = "Player X's turn";\n` +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function handleCellClick(row, col) {\n' +
+    '    // Prevent click if cell is already taken or game is finished\n' +
+    '    if (board[row][col] || winner) return;\n' +
+    '\n' +
+    '    board[row][col] = currentPlayer;\n' +
+    '    if (checkWinner()) {\n' +
+    '      winner = currentPlayer;\n' +
+    '      status = `Winner: ${winner}!`;\n' +
+    '    } else if (isBoardFull()) {\n' +
+    '      draw = true;\n' +
+    "      status = 'Draw!';\n" +
+    '    } else {\n' +
+    "      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';\n" +
+    "      status = `Player ${currentPlayer}'s turn`;\n" +
+    '    }\n' +
+    '    // ensure reactivity for Svelte\n' +
+    '    board = [...board.map(r => [...r])];\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function checkWinner() {\n' +
+    '    // Rows, columns, diagonals\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '\n' +
+    '    return lines.some(line => {\n' +
+    '      const [a, b, c] = line;\n' +
+    '      return (\n' +
+    '        board[a[0]][a[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[b[0]][b[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[c[0]][c[1]]\n' +
+    '      );\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function isBoardFull() {\n' +
+    "    return board.flat().every(cell => cell !== '');\n" +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function restartGame() {\n' +
+    '    board = [\n' +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    '    ];\n' +
+    "    currentPlayer = 'X';\n" +
+    "    winner = '';\n" +
+    '    draw = false;\n' +
+    `    status = "Player X's turn";\n` +
+    '  }\n' +
+    '</script>\n' +
+    '\n' +
+    '<style>\n' +
+    '  :root {\n' +
+    '    --primary: #4CAF50;\n' +
+    '    --secondary: #FFC107;\n' +
+    '    --accent: #2196F3;\n' +
+    '    --background: #f5f5f5;\n' +
+    '    --foreground: #fff;\n' +
+    '    --cell-size: min(100px, 18vw);\n' +
+    '    --cell-font-size: min(3rem, 7vw);\n' +
+    '  }\n' +
+    '\n' +
+    '  main {\n' +
+    '    height: 100vh;\n' +
+    '    width: 100vw;\n' +
+    '    background: var(--background);\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .game-container {\n' +
+    '    background: var(--foreground);\n' +
+    '    box-shadow: 0 6px 32px rgba(0,0,0,0.09);\n' +
+    '    padding: 2rem 2rem 1.5rem 2rem;\n' +
+    '    border-radius: 2rem;\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .status {\n' +
+    '    font-size: 1.35rem;\n' +
+    '    margin-bottom: 1.1rem;\n' +
+    '    font-weight: 600;\n' +
+    '    color: var(--primary);\n' +
+    '    min-height: 2.2em;\n' +
+    '    letter-spacing: 0.01em;\n' +
+    '    text-align: center;\n' +
+    '    transition: color 0.25s;\n' +
+    '  }\n' +
+    '\n' +
+    '  .board {\n' +
+    '    display: grid;\n' +
+    '    grid-template-columns: repeat(3, var(--cell-size));\n' +
+    '    grid-template-rows: repeat(3, var(--cell-size));\n' +
+    '    gap: 0.32em;\n' +
+    '    margin-bottom: 1.3em;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell {\n' +
+    '    width: var(--cell-size);\n' +
+    '    height: var(--cell-size);\n' +
+    '    font-size: var(--cell-font-size);\n' +
+    '    background: var(--foreground);\n' +
+    '    border: none;\n' +
+    '    outline: 2px solid var(--accent);\n' +
+    '    border-radius: 0.65em;\n' +
+    '    display: flex;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '    font-weight: bold;\n' +
+    '    color: var(--primary);\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.16s, color 0.16s;\n' +
+    '    user-select: none;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell:disabled,\n' +
+    '  .cell.disabled {\n' +
+    '    background: #e0e0e0;\n' +
+    '    color: #9e9e9e;\n' +
+    '    cursor: not-allowed;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell[aria-current="true"]:not(:disabled) {\n' +
+    '    background: var(--secondary);\n' +
+    '    color: #212121;\n' +
+    '    outline: 2.5px solid var(--primary);\n' +
+    '    z-index: 2;\n' +
+    '  }\n' +
+    '\n' +
+    '  .winner-cell {\n' +
+    '    background: var(--primary);\n' +
+    '    color: #fff;\n' +
+    '    animation: winner-flash 1s linear infinite alternate;\n' +
+    '  }\n' +
+    '\n' +
+    '  @keyframes winner-flash {\n' +
+    '    0% { background: var(--primary); color: #fff; }\n' +
+    '    100% { background: var(--secondary); color: #212121; }\n' +
+    '  }\n' +
+    '\n' +
+    '  .restart-btn {\n' +
+    '    background: var(--accent);\n' +
+    '    color: #fff;\n' +
+    '    border: none;\n' +
+    '    padding: 0.75em 2em;\n' +
+    '    border-radius: 1em;\n' +
+    '    font-size: 1.05rem;\n' +
+    '    font-weight: 600;\n' +
+    '    letter-spacing: 0.05em;\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.2s;\n' +
+    '    box-shadow: 0 2px 8px #bbb6;\n' +
+    '  }\n' +
+    '  .restart-btn:active {\n' +
+    '    background: var(--primary);\n' +
+    '  }\n' +
+    '\n' +
+    '  @media (max-width: 600px) {\n' +
+    '    .game-container {\n' +
+    '      padding: 1em 0.5em 1em 0.5em;\n' +
+    '      border-radius: 1.1rem;\n' +
+    '    }\n' +
+    '  }\n' +
+    '</style>\n' +
+    '\n' +
+    '<main>\n' +
+    '  <div class="game-container" data-testid="tictactoe-container">\n' +
+    '    <div class="status" data-testid="status">{status}</div>\n' +
+    '    <div class="board" data-testid="board">\n' +
+    '      {#each board as row, rIdx}\n' +
+    '        {#each row as cell, cIdx}\n' +
+    '          <button\n' +
+    `            class="cell {winner && winnerCells(rIdx, cIdx) ? 'winner-cell' : ''} {cell || winner ? 'disabled' : ''}"\n` +
+    '            disabled={!!cell || !!winner}\n' +
+    `            aria-current={currentPlayer === 'X' && !winner && !draw && !cell && rIdx*cIdx===0 ? "true" : undefined}\n` +
+    '            data-testid={"cell-" + rIdx + "-" + cIdx}\n' +
+    '            on:click={() => handleCellClick(rIdx, cIdx)}\n' +
+    '          >\n' +
+    '            {cell}\n' +
+    '          </button>\n' +
+    '        {/each}\n' +
+    '      {/each}\n' +
+    '    </div>\n' +
+    '    <button class="restart-btn" on:click={restartGame} data-testid="restart">\n' +
+    '      Restart\n' +
+    '    </button>\n' +
+    '  </div>\n' +
+    '</main>\n' +
+    '\n' +
+    '<script>\n' +
+    '  // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    '  // This is a minimalist approach, highlight if any of the winning lines match\n' +
+    '  function winnerCells(r, c) {\n' +
+    '    if (!winner) return false;\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '    return lines.some(line => {\n' +
+    '      if (\n' +
+    '        board[line[0][0]][line[0][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[1][0]][line[1][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[2][0]][line[2][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === winner\n' +
+    '      ) {\n' +
+    '        return line.some(([lr, lc]) => lr === r && lc === c);\n' +
+    '      }\n' +
+    '      return false;\n' +
+    '    });\n' +
+    '  }\n' +
+    '</script>\n',
+  runnerError: Error: RunnerError
+      at reviveInvokeError (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:541:18)
+      at Object.invoke (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:624:15)
+      at async SSRCompatModuleRunner.getModuleInformation (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1192:73)
+      at async SSRCompatModuleRunner.import (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1103:27)
+      at async instantiateModule (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/chunks/dep-glQox-ep.js:30872:12)
+      at async loud_ssr_load_module (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:69:11)
+      at async resolve (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:96:18)
+      at async result.component (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:194:41)
+      at async Promise.all (index 1)
+      at async render_response (/home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/runtime/server/page/render.js:76:21)
+}
+6:20:56 PM [vite] (ssr) page reload src/routes/+page.svelte
+6:20:59 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/0.js
+6:20:59 PM [vite] (ssr) page reload .svelte-kit/generated/server/internal.js
+6:20:59 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/2.js
+6:20:59 PM [vite] (client) page reload .svelte-kit/generated/client/matchers.js
+6:20:59 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/1.js
+6:20:59 PM [vite] (client) page reload .svelte-kit/generated/root.js
+6:20:59 PM [vite] (ssr) page reload .svelte-kit/generated/root.js
+6:20:59 PM [vite] (client) page reload .svelte-kit/generated/client/app.js
+6:20:59 PM [vite] (ssr) Error when evaluating SSR module /src/routes/+page.svelte: src/routes/+page.svelte:251:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate
+  Plugin: vite-plugin-svelte
+  File: src/routes/+page.svelte:251:0
+   249 |  </main>
+   250 |  
+   251 |  <script>
+          ^
+   252 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)
+   253 |    // This is a minimalist approach, highlight if any of the winning lines match
+[Error [CompileError]: src/routes/+page.svelte:251:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate] {
+  id: 'src/routes/+page.svelte',
+  frame: ' 249 |  </main>\n' +
+    ' 250 |  \n' +
+    ' 251 |  <script>\n' +
+    '        ^\n' +
+    ' 252 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    ' 253 |    // This is a minimalist approach, highlight if any of the winning lines match',
+  code: 'script_duplicate',
+  loc: { line: 251, column: 0, file: 'src/routes/+page.svelte' },
+  plugin: 'vite-plugin-svelte',
+  pluginCode: '<script>\n' +
+    '  // --- Game logic state ---\n' +
+    '  let board = [\n' +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    '  ];\n' +
+    "  let currentPlayer = 'X';\n" +
+    "  let winner = '';\n" +
+    '  let draw = false;\n' +
+    `  let status = "Player X's turn";\n` +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function handleCellClick(row, col) {\n' +
+    '    // Prevent click if cell is already taken or game is finished\n' +
+    '    if (board[row][col] || winner) return;\n' +
+    '\n' +
+    '    board[row][col] = currentPlayer;\n' +
+    '    if (checkWinner()) {\n' +
+    '      winner = currentPlayer;\n' +
+    '      status = `Winner: ${winner}!`;\n' +
+    '    } else if (isBoardFull()) {\n' +
+    '      draw = true;\n' +
+    "      status = 'Draw!';\n" +
+    '    } else {\n' +
+    "      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';\n" +
+    "      status = `Player ${currentPlayer}'s turn`;\n" +
+    '    }\n' +
+    '    // ensure reactivity for Svelte\n' +
+    '    board = [...board.map(r => [...r])];\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function checkWinner() {\n' +
+    '    // Rows, columns, diagonals\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '\n' +
+    '    return lines.some(line => {\n' +
+    '      const [a, b, c] = line;\n' +
+    '      return (\n' +
+    '        board[a[0]][a[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[b[0]][b[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[c[0]][c[1]]\n' +
+    '      );\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function isBoardFull() {\n' +
+    "    return board.flat().every(cell => cell !== '');\n" +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function restartGame() {\n' +
+    '    board = [\n' +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    '    ];\n' +
+    "    currentPlayer = 'X';\n" +
+    "    winner = '';\n" +
+    '    draw = false;\n' +
+    `    status = "Player X's turn";\n` +
+    '  }\n' +
+    '\n' +
+    '  // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    '  // This is a minimalist approach, highlight if any of the winning lines match\n' +
+    '  function winnerCells(r, c) {\n' +
+    '    if (!winner) return false;\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '    return lines.some(line => {\n' +
+    '      if (\n' +
+    '        board[line[0][0]][line[0][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[1][0]][line[1][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[2][0]][line[2][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === winner\n' +
+    '      ) {\n' +
+    '        return line.some(([lr, lc]) => lr === r && lc === c);\n' +
+    '      }\n' +
+    '      return false;\n' +
+    '    });\n' +
+    '  }\n' +
+    '</script>\n' +
+    '\n' +
+    '<style>\n' +
+    '  :root {\n' +
+    '    --primary: #4CAF50;\n' +
+    '    --secondary: #FFC107;\n' +
+    '    --accent: #2196F3;\n' +
+    '    --background: #f5f5f5;\n' +
+    '    --foreground: #fff;\n' +
+    '    --cell-size: min(100px, 18vw);\n' +
+    '    --cell-font-size: min(3rem, 7vw);\n' +
+    '  }\n' +
+    '\n' +
+    '  main {\n' +
+    '    height: 100vh;\n' +
+    '    width: 100vw;\n' +
+    '    background: var(--background);\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .game-container {\n' +
+    '    background: var(--foreground);\n' +
+    '    box-shadow: 0 6px 32px rgba(0,0,0,0.09);\n' +
+    '    padding: 2rem 2rem 1.5rem 2rem;\n' +
+    '    border-radius: 2rem;\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .status {\n' +
+    '    font-size: 1.35rem;\n' +
+    '    margin-bottom: 1.1rem;\n' +
+    '    font-weight: 600;\n' +
+    '    color: var(--primary);\n' +
+    '    min-height: 2.2em;\n' +
+    '    letter-spacing: 0.01em;\n' +
+    '    text-align: center;\n' +
+    '    transition: color 0.25s;\n' +
+    '  }\n' +
+    '\n' +
+    '  .board {\n' +
+    '    display: grid;\n' +
+    '    grid-template-columns: repeat(3, var(--cell-size));\n' +
+    '    grid-template-rows: repeat(3, var(--cell-size));\n' +
+    '    gap: 0.32em;\n' +
+    '    margin-bottom: 1.3em;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell {\n' +
+    '    width: var(--cell-size);\n' +
+    '    height: var(--cell-size);\n' +
+    '    font-size: var(--cell-font-size);\n' +
+    '    background: var(--foreground);\n' +
+    '    border: none;\n' +
+    '    outline: 2px solid var(--accent);\n' +
+    '    border-radius: 0.65em;\n' +
+    '    display: flex;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '    font-weight: bold;\n' +
+    '    color: var(--primary);\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.16s, color 0.16s;\n' +
+    '    user-select: none;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell:disabled,\n' +
+    '  .cell.disabled {\n' +
+    '    background: #e0e0e0;\n' +
+    '    color: #9e9e9e;\n' +
+    '    cursor: not-allowed;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell[aria-current="true"]:not(:disabled) {\n' +
+    '    background: var(--secondary);\n' +
+    '    color: #212121;\n' +
+    '    outline: 2.5px solid var(--primary);\n' +
+    '    z-index: 2;\n' +
+    '  }\n' +
+    '\n' +
+    '  .winner-cell {\n' +
+    '    background: var(--primary);\n' +
+    '    color: #fff;\n' +
+    '    animation: winner-flash 1s linear infinite alternate;\n' +
+    '  }\n' +
+    '\n' +
+    '  @keyframes winner-flash {\n' +
+    '    0% { background: var(--primary); color: #fff; }\n' +
+    '    100% { background: var(--secondary); color: #212121; }\n' +
+    '  }\n' +
+    '\n' +
+    '  .restart-btn {\n' +
+    '    background: var(--accent);\n' +
+    '    color: #fff;\n' +
+    '    border: none;\n' +
+    '    padding: 0.75em 2em;\n' +
+    '    border-radius: 1em;\n' +
+    '    font-size: 1.05rem;\n' +
+    '    font-weight: 600;\n' +
+    '    letter-spacing: 0.05em;\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.2s;\n' +
+    '    box-shadow: 0 2px 8px #bbb6;\n' +
+    '  }\n' +
+    '  .restart-btn:active {\n' +
+    '    background: var(--primary);\n' +
+    '  }\n' +
+    '\n' +
+    '  @media (max-width: 600px) {\n' +
+    '    .game-container {\n' +
+    '      padding: 1em 0.5em 1em 0.5em;\n' +
+    '      border-radius: 1.1rem;\n' +
+    '    }\n' +
+    '  }\n' +
+    '</style>\n' +
+    '\n' +
+    '<main>\n' +
+    '  <div class="game-container" data-testid="tictactoe-container">\n' +
+    '    <div class="status" data-testid="status">{status}</div>\n' +
+    '    <div class="board" data-testid="board">\n' +
+    '      {#each board as row, rIdx}\n' +
+    '        {#each row as cell, cIdx}\n' +
+    '          <button\n' +
+    `            class="cell {winner && winnerCells(rIdx, cIdx) ? 'winner-cell' : ''} {cell || winner ? 'disabled' : ''}"\n` +
+    '            disabled={!!cell || !!winner}\n' +
+    `            aria-current={currentPlayer === 'X' && !winner && !draw && !cell && rIdx*cIdx===0 ? "true" : undefined}\n` +
+    '            data-testid={"cell-" + rIdx + "-" + cIdx}\n' +
+    '            on:click={() => handleCellClick(rIdx, cIdx)}\n' +
+    '          >\n' +
+    '            {cell}\n' +
+    '          </button>\n' +
+    '        {/each}\n' +
+    '      {/each}\n' +
+    '    </div>\n' +
+    '    <button class="restart-btn" on:click={restartGame} data-testid="restart">\n' +
+    '      Restart\n' +
+    '    </button>\n' +
+    '  </div>\n' +
+    '</main>\n' +
+    '\n' +
+    '<script>\n' +
+    '  // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    '  // This is a minimalist approach, highlight if any of the winning lines match\n' +
+    '  function winnerCells(r, c) {\n' +
+    '    if (!winner) return false;\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '    return lines.some(line => {\n' +
+    '      if (\n' +
+    '        board[line[0][0]][line[0][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[1][0]][line[1][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[2][0]][line[2][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === winner\n' +
+    '      ) {\n' +
+    '        return line.some(([lr, lc]) => lr === r && lc === c);\n' +
+    '      }\n' +
+    '      return false;\n' +
+    '    });\n' +
+    '  }\n' +
+    '</script>\n',
+  runnerError: Error: RunnerError
+      at reviveInvokeError (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:541:18)
+      at Object.invoke (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:624:15)
+      at async SSRCompatModuleRunner.getModuleInformation (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1192:73)
+      at async SSRCompatModuleRunner.import (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1103:27)
+      at async instantiateModule (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/chunks/dep-glQox-ep.js:30872:12)
+      at async loud_ssr_load_module (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:69:11)
+      at async resolve (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:96:18)
+      at async result.component (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:194:41)
+      at async Promise.all (index 1)
+      at async render_response (/home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/runtime/server/page/render.js:76:21)
+}
+6:20:59 PM [vite] (ssr) Error when evaluating SSR module /src/routes/+page.svelte: src/routes/+page.svelte:251:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate
+  Plugin: vite-plugin-svelte
+  File: src/routes/+page.svelte:251:0
+   249 |  </main>
+   250 |  
+   251 |  <script>
+          ^
+   252 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)
+   253 |    // This is a minimalist approach, highlight if any of the winning lines match
+[Error [CompileError]: src/routes/+page.svelte:251:0 A component can have a single top-level `<script>` element and/or a single top-level `<script module>` element
+https://svelte.dev/e/script_duplicate] {
+  id: 'src/routes/+page.svelte',
+  frame: ' 249 |  </main>\n' +
+    ' 250 |  \n' +
+    ' 251 |  <script>\n' +
+    '        ^\n' +
+    ' 252 |    // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    ' 253 |    // This is a minimalist approach, highlight if any of the winning lines match',
+  code: 'script_duplicate',
+  loc: { line: 251, column: 0, file: 'src/routes/+page.svelte' },
+  plugin: 'vite-plugin-svelte',
+  pluginCode: '<script>\n' +
+    '  // --- Game logic state ---\n' +
+    '  let board = [\n' +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    "    ['', '', ''],\n" +
+    '  ];\n' +
+    "  let currentPlayer = 'X';\n" +
+    "  let winner = '';\n" +
+    '  let draw = false;\n' +
+    `  let status = "Player X's turn";\n` +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function handleCellClick(row, col) {\n' +
+    '    // Prevent click if cell is already taken or game is finished\n' +
+    '    if (board[row][col] || winner) return;\n' +
+    '\n' +
+    '    board[row][col] = currentPlayer;\n' +
+    '    if (checkWinner()) {\n' +
+    '      winner = currentPlayer;\n' +
+    '      status = `Winner: ${winner}!`;\n' +
+    '    } else if (isBoardFull()) {\n' +
+    '      draw = true;\n' +
+    "      status = 'Draw!';\n" +
+    '    } else {\n' +
+    "      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';\n" +
+    "      status = `Player ${currentPlayer}'s turn`;\n" +
+    '    }\n' +
+    '    // ensure reactivity for Svelte\n' +
+    '    board = [...board.map(r => [...r])];\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function checkWinner() {\n' +
+    '    // Rows, columns, diagonals\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '\n' +
+    '    return lines.some(line => {\n' +
+    '      const [a, b, c] = line;\n' +
+    '      return (\n' +
+    '        board[a[0]][a[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[b[0]][b[1]] &&\n' +
+    '        board[a[0]][a[1]] === board[c[0]][c[1]]\n' +
+    '      );\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function isBoardFull() {\n' +
+    "    return board.flat().every(cell => cell !== '');\n" +
+    '  }\n' +
+    '\n' +
+    '  // PUBLIC_INTERFACE\n' +
+    '  function restartGame() {\n' +
+    '    board = [\n' +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    "      ['', '', ''],\n" +
+    '    ];\n' +
+    "    currentPlayer = 'X';\n" +
+    "    winner = '';\n" +
+    '    draw = false;\n' +
+    `    status = "Player X's turn";\n` +
+    '  }\n' +
+    '\n' +
+    '  // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    '  // This is a minimalist approach, highlight if any of the winning lines match\n' +
+    '  function winnerCells(r, c) {\n' +
+    '    if (!winner) return false;\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '    return lines.some(line => {\n' +
+    '      if (\n' +
+    '        board[line[0][0]][line[0][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[1][0]][line[1][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[2][0]][line[2][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === winner\n' +
+    '      ) {\n' +
+    '        return line.some(([lr, lc]) => lr === r && lc === c);\n' +
+    '      }\n' +
+    '      return false;\n' +
+    '    });\n' +
+    '  }\n' +
+    '</script>\n' +
+    '\n' +
+    '<style>\n' +
+    '  :root {\n' +
+    '    --primary: #4CAF50;\n' +
+    '    --secondary: #FFC107;\n' +
+    '    --accent: #2196F3;\n' +
+    '    --background: #f5f5f5;\n' +
+    '    --foreground: #fff;\n' +
+    '    --cell-size: min(100px, 18vw);\n' +
+    '    --cell-font-size: min(3rem, 7vw);\n' +
+    '  }\n' +
+    '\n' +
+    '  main {\n' +
+    '    height: 100vh;\n' +
+    '    width: 100vw;\n' +
+    '    background: var(--background);\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .game-container {\n' +
+    '    background: var(--foreground);\n' +
+    '    box-shadow: 0 6px 32px rgba(0,0,0,0.09);\n' +
+    '    padding: 2rem 2rem 1.5rem 2rem;\n' +
+    '    border-radius: 2rem;\n' +
+    '    display: flex;\n' +
+    '    flex-direction: column;\n' +
+    '    align-items: center;\n' +
+    '  }\n' +
+    '\n' +
+    '  .status {\n' +
+    '    font-size: 1.35rem;\n' +
+    '    margin-bottom: 1.1rem;\n' +
+    '    font-weight: 600;\n' +
+    '    color: var(--primary);\n' +
+    '    min-height: 2.2em;\n' +
+    '    letter-spacing: 0.01em;\n' +
+    '    text-align: center;\n' +
+    '    transition: color 0.25s;\n' +
+    '  }\n' +
+    '\n' +
+    '  .board {\n' +
+    '    display: grid;\n' +
+    '    grid-template-columns: repeat(3, var(--cell-size));\n' +
+    '    grid-template-rows: repeat(3, var(--cell-size));\n' +
+    '    gap: 0.32em;\n' +
+    '    margin-bottom: 1.3em;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell {\n' +
+    '    width: var(--cell-size);\n' +
+    '    height: var(--cell-size);\n' +
+    '    font-size: var(--cell-font-size);\n' +
+    '    background: var(--foreground);\n' +
+    '    border: none;\n' +
+    '    outline: 2px solid var(--accent);\n' +
+    '    border-radius: 0.65em;\n' +
+    '    display: flex;\n' +
+    '    justify-content: center;\n' +
+    '    align-items: center;\n' +
+    '    font-weight: bold;\n' +
+    '    color: var(--primary);\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.16s, color 0.16s;\n' +
+    '    user-select: none;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell:disabled,\n' +
+    '  .cell.disabled {\n' +
+    '    background: #e0e0e0;\n' +
+    '    color: #9e9e9e;\n' +
+    '    cursor: not-allowed;\n' +
+    '  }\n' +
+    '\n' +
+    '  .cell[aria-current="true"]:not(:disabled) {\n' +
+    '    background: var(--secondary);\n' +
+    '    color: #212121;\n' +
+    '    outline: 2.5px solid var(--primary);\n' +
+    '    z-index: 2;\n' +
+    '  }\n' +
+    '\n' +
+    '  .winner-cell {\n' +
+    '    background: var(--primary);\n' +
+    '    color: #fff;\n' +
+    '    animation: winner-flash 1s linear infinite alternate;\n' +
+    '  }\n' +
+    '\n' +
+    '  @keyframes winner-flash {\n' +
+    '    0% { background: var(--primary); color: #fff; }\n' +
+    '    100% { background: var(--secondary); color: #212121; }\n' +
+    '  }\n' +
+    '\n' +
+    '  .restart-btn {\n' +
+    '    background: var(--accent);\n' +
+    '    color: #fff;\n' +
+    '    border: none;\n' +
+    '    padding: 0.75em 2em;\n' +
+    '    border-radius: 1em;\n' +
+    '    font-size: 1.05rem;\n' +
+    '    font-weight: 600;\n' +
+    '    letter-spacing: 0.05em;\n' +
+    '    cursor: pointer;\n' +
+    '    transition: background 0.2s;\n' +
+    '    box-shadow: 0 2px 8px #bbb6;\n' +
+    '  }\n' +
+    '  .restart-btn:active {\n' +
+    '    background: var(--primary);\n' +
+    '  }\n' +
+    '\n' +
+    '  @media (max-width: 600px) {\n' +
+    '    .game-container {\n' +
+    '      padding: 1em 0.5em 1em 0.5em;\n' +
+    '      border-radius: 1.1rem;\n' +
+    '    }\n' +
+    '  }\n' +
+    '</style>\n' +
+    '\n' +
+    '<main>\n' +
+    '  <div class="game-container" data-testid="tictactoe-container">\n' +
+    '    <div class="status" data-testid="status">{status}</div>\n' +
+    '    <div class="board" data-testid="board">\n' +
+    '      {#each board as row, rIdx}\n' +
+    '        {#each row as cell, cIdx}\n' +
+    '          <button\n' +
+    `            class="cell {winner && winnerCells(rIdx, cIdx) ? 'winner-cell' : ''} {cell || winner ? 'disabled' : ''}"\n` +
+    '            disabled={!!cell || !!winner}\n' +
+    `            aria-current={currentPlayer === 'X' && !winner && !draw && !cell && rIdx*cIdx===0 ? "true" : undefined}\n` +
+    '            data-testid={"cell-" + rIdx + "-" + cIdx}\n' +
+    '            on:click={() => handleCellClick(rIdx, cIdx)}\n' +
+    '          >\n' +
+    '            {cell}\n' +
+    '          </button>\n' +
+    '        {/each}\n' +
+    '      {/each}\n' +
+    '    </div>\n' +
+    '    <button class="restart-btn" on:click={restartGame} data-testid="restart">\n' +
+    '      Restart\n' +
+    '    </button>\n' +
+    '  </div>\n' +
+    '</main>\n' +
+    '\n' +
+    '<script>\n' +
+    '  // Helper to highlight winner cells (optional, fallback: none highlighted if not found)\n' +
+    '  // This is a minimalist approach, highlight if any of the winning lines match\n' +
+    '  function winnerCells(r, c) {\n' +
+    '    if (!winner) return false;\n' +
+    '    const lines = [\n' +
+    '      // Rows\n' +
+    '      [ [0,0], [0,1], [0,2] ],\n' +
+    '      [ [1,0], [1,1], [1,2] ],\n' +
+    '      [ [2,0], [2,1], [2,2] ],\n' +
+    '      // Columns\n' +
+    '      [ [0,0], [1,0], [2,0] ],\n' +
+    '      [ [0,1], [1,1], [2,1] ],\n' +
+    '      [ [0,2], [1,2], [2,2] ],\n' +
+    '      // Diagonals\n' +
+    '      [ [0,0], [1,1], [2,2] ],\n' +
+    '      [ [0,2], [1,1], [2,0] ],\n' +
+    '    ];\n' +
+    '    return lines.some(line => {\n' +
+    '      if (\n' +
+    '        board[line[0][0]][line[0][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[1][0]][line[1][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === board[line[2][0]][line[2][1]] &&\n' +
+    '        board[line[0][0]][line[0][1]] === winner\n' +
+    '      ) {\n' +
+    '        return line.some(([lr, lc]) => lr === r && lc === c);\n' +
+    '      }\n' +
+    '      return false;\n' +
+    '    });\n' +
+    '  }\n' +
+    '</script>\n',
+  runnerError: Error: RunnerError
+      at reviveInvokeError (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:541:18)
+      at Object.invoke (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:624:15)
+      at async SSRCompatModuleRunner.getModuleInformation (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1192:73)
+      at async SSRCompatModuleRunner.import (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/module-runner.js:1103:27)
+      at async instantiateModule (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/vite/dist/node/chunks/dep-glQox-ep.js:30872:12)
+      at async loud_ssr_load_module (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:69:11)
+      at async resolve (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:96:18)
+      at async result.component (file:///home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/exports/vite/dev/index.js:194:41)
+      at async Promise.all (index 1)
+      at async render_response (/home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe/node_modules/@sveltejs/kit/src/runtime/server/page/render.js:76:21)
+}
+6:21:13 PM [vite] (client) hmr update /src/routes/+page.svelte
+6:21:13 PM [vite] (ssr) page reload src/routes/+page.svelte
+6:21:16 PM [vite] (ssr) page reload .svelte-kit/generated/server/internal.js
+6:21:16 PM [vite] (client) page reload .svelte-kit/generated/client/matchers.js
+6:21:16 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/2.js
+6:21:16 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/0.js
+6:21:16 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/1.js
+6:21:16 PM [vite] (client) page reload .svelte-kit/generated/root.js
+6:21:16 PM [vite] (ssr) page reload .svelte-kit/generated/root.js
+6:21:16 PM [vite] (client) page reload .svelte-kit/generated/client/app.js
+6:21:23 PM [vite] (ssr) page reload src/routes/+page.svelte
+6:21:27 PM [vite] (client) page reload .svelte-kit/generated/client/matchers.js
+6:21:27 PM [vite] (client) page reload .svelte-kit/generated/client/app.js
+6:21:27 PM [vite] (client) page reload .svelte-kit/generated/root.js
+6:21:27 PM [vite] (ssr) page reload .svelte-kit/generated/root.js
+6:21:27 PM [vite] (ssr) page reload .svelte-kit/generated/server/internal.js
+6:21:27 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/0.js
+6:21:27 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/2.js
+6:21:27 PM [vite] (client) page reload .svelte-kit/generated/client/nodes/1.js

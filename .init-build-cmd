@@ -1,0 +1,4 @@
+{
+    "command": "npm install && npm run check && npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/webtictactoe-111943-13a09d90/webtictactoe"
+}
